@@ -8,7 +8,7 @@ const mysql = require('mysql2/promise');
 let app = express();
 app.set('view engine', 'hbs');
 app.use(express.static('public'));
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({extended:true}));
 
 wax.on(hbs.handlebars);
 wax.setLayoutPath('./views/layouts');
@@ -33,6 +33,24 @@ let [customers] = await connection.execute('SELECT * FROM Customers INNER JOIN C
 res.render('customers/index',{
     customers: customers
 });
+})
+
+app.get('/customers/create', async function (req,res){
+    const [companies] = await connection.execute(`SELECT company_id, name from Companies`);
+    res.render('customers/create', {
+        companies: companies
+    })
+})
+
+app.post('/customers/create', async function (req, res){
+    const {first_name, last_name, rating, company_id} = req.body;
+    const sql = `INSERT into Customers (first_name, last_name, rating, company_id) values (?,?,?,?);`
+    const bindings = [first_name, last_name, rating, company_id];
+    await connection.execute(sql, bindings);
+    res.redirect('/customers');
+
+    console.log(req.body);
+
 })
 
 app.get('/', (req,res) => {
