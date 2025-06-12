@@ -46,14 +46,20 @@ app.get('/customers/create', async function (req,res){
 
 //post new customer
 app.post('/customers/create', async function (req, res){
+    try {
     const {first_name, last_name, rating, company_id} = req.body;
     const sql = `INSERT into Customers (first_name, last_name, rating, company_id) values (?,?,?,?);`
     const bindings = [first_name, last_name, rating, company_id];
+    
     await connection.execute(sql, bindings);
+
+    } catch (e)
+    {
+        console.log(e);
+    } finally {
     res.redirect('/customers');
 
-    console.log(req.body);
-
+    console.log(req.body);}
 })
 
 
@@ -62,7 +68,7 @@ app.get('/employees', async function (req, res) {
 let [employees] = await connection.execute('SELECT * FROM Employees INNER JOIN Departments ON Employees.department_id = Departments.department_id;');
 res.render('employees/index',{
     employees: employees
-});
+})
 })
 
 // new employee form
@@ -75,26 +81,32 @@ app.get('/employees/create', async function (req,res){
 
 //post new employee
 app.post('/employees/create', async function (req, res){
+    try {
     const {first_name, last_name, department_id} = req.body;
     const sql = `INSERT into Employees (first_name, last_name, department_id) values (?,?,?);`
     const bindings = [first_name, last_name, department_id];
+    
     await connection.execute(sql, bindings);
-    res.redirect('/employees');
+    } catch (e) {
+        console.log(e);
+    } finally {
+        res.redirect('/employees');
+    }
 
-    console.log(req.body);
+    
 })
 
 
 //hello world
 app.get('/', (req,res) => {
-    res.send('Hello, World!');
+    res.render('index');
 });
 
 app.get('/about-us', (req,res) => {
     res.render('about-us');
 });
 
-app.get('/contact-us', (req,res) => {
+app.get('contact-us', (req,res) => {
     res.render('contact-us');
 });
 
