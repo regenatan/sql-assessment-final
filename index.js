@@ -62,6 +62,31 @@ app.post('/customers/create', async function (req, res){
     console.log(req.body);}
 })
 
+// delete customer
+app.get('/customers/:id/delete', async function (req, res){
+    const customerId = req.params.id;
+    let [rows] = await connection.execute(`SELECT * from Customers where customer_id = ?`, [customerId]);
+    let customer = rows[0];
+    res.render('customers/delete',{
+        customer
+    })
+})
+
+// post the customer deletion
+app.post('/customers/:id/delete', async function (req, res){
+    try {
+    const customerId = req.params.id;
+    await connection.execute(`DELETE from Sales where customer_id = ?`, [customerId]);
+    await connection.execute(`DELETE from EmployeeCustomer where customer_id = ?`, [customerId]);
+    await connection.execute(`DELETE from Customers where customer_id = ?`, [customerId]);
+    res.redirect('/customers');
+    } catch (e) {
+        console.log(e);
+        res.send("Unable to delete because of relationship. Press [BACK] and try again.")
+    } 
+})
+
+
 
 // get all employees
 app.get('/employees', async function (req, res) {

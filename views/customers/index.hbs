@@ -10,6 +10,7 @@
             <th>Last Name</th>
             <th>Rating</th>
             <th>Company</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +20,9 @@
             <td>{{this.last_name}}</td>
             <td>{{this.rating}}</td>
             <td>{{this.name}}</td>
+            <td> 
+                <a href = "/customers/{{this.customer_id}}/delete">Delete</a>
+            </td>
         </tr>
           {{/each}}
     </tbody>

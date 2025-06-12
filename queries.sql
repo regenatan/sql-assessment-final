@@ -9,3 +9,5 @@ INSERT into Companies (name, description) VALUES ("Temasek Holdings", "Richest c
 SELECT * FROM Employees INNER JOIN Departments ON Employees.employee_id = Departments.department_id;
 
 INSERT into Employees (first_name, last_name, department_id) values ("test1","test2","3");
+
+DELETE from Customers where customer_id = 5;
