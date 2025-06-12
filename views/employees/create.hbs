@@ -1,0 +1,31 @@
+{{#extends "base"}}
+
+{{#block 'content'}}
+
+<h1>Create new employee</h1>
+
+  <form method="POST">
+    <div class="mb-3">
+      <label>First Name</label>
+      <input type="text" class="form-control" name="first_name">
+    </div>
+    <div class="mb-3">
+      <label>Last Name</label>
+      <input type="text" class="form-control" name="last_name">
+    </div>
+    <div class="mb-3">
+      <label>Company</label>
+      <select name="department_id" class="form-select">
+        {{#each departments}}
+        <option value="{{this.department_id}}">{{this.name}}</option>
+        {{/each}}
+
+
+      </select>
+    </div>
+    <input type="submit" class="btn btn-primary mt-3" />
+  </form>
+
+{{/block}}
+
+{{/extends}}

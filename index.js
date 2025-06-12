@@ -28,6 +28,7 @@ let connection = await mysql.createConnection({
         'password': process.env.DB_PASSWORD
 })
 
+//get all customers
 app.get('/customers', async function (req, res) {
 let [customers] = await connection.execute('SELECT * FROM Customers INNER JOIN Companies ON Customers.company_id = Companies.company_id');
 res.render('customers/index',{
@@ -35,6 +36,7 @@ res.render('customers/index',{
 });
 })
 
+// new customer form
 app.get('/customers/create', async function (req,res){
     const [companies] = await connection.execute(`SELECT company_id, name from Companies`);
     res.render('customers/create', {
@@ -42,6 +44,7 @@ app.get('/customers/create', async function (req,res){
     })
 })
 
+//post new customer
 app.post('/customers/create', async function (req, res){
     const {first_name, last_name, rating, company_id} = req.body;
     const sql = `INSERT into Customers (first_name, last_name, rating, company_id) values (?,?,?,?);`
@@ -53,6 +56,36 @@ app.post('/customers/create', async function (req, res){
 
 })
 
+
+// get all employees
+app.get('/employees', async function (req, res) {
+let [employees] = await connection.execute('SELECT * FROM Employees INNER JOIN Departments ON Employees.department_id = Departments.department_id;');
+res.render('employees/index',{
+    employees: employees
+});
+})
+
+// new employee form
+app.get('/employees/create', async function (req,res){
+    const [departments] = await connection.execute(`SELECT department_id, name from Departments`);
+    res.render('employees/create', {
+        departments: departments
+    })
+})
+
+//post new employee
+app.post('/employees/create', async function (req, res){
+    const {first_name, last_name, department_id} = req.body;
+    const sql = `INSERT into Employees (first_name, last_name, department_id) values (?,?,?);`
+    const bindings = [first_name, last_name, department_id];
+    await connection.execute(sql, bindings);
+    res.redirect('/employees');
+
+    console.log(req.body);
+})
+
+
+//hello world
 app.get('/', (req,res) => {
     res.send('Hello, World!');
 });

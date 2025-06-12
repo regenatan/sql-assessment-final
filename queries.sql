@@ -5,3 +5,7 @@ INSERT into Customers (first_name, last_name, rating, company_id) values ("tony"
 SELECT company_id, name from Companies;
 
 INSERT into Companies (name, description) VALUES ("Temasek Holdings", "Richest company in singapore.");
+
+SELECT * FROM Employees INNER JOIN Departments ON Employees.employee_id = Departments.department_id;
+
+INSERT into Employees (first_name, last_name, department_id) values ("test1","test2","3");
