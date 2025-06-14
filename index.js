@@ -18,7 +18,7 @@ const helpers = require('handlebars-helpers');
 // tell handlebars-helpers where to find handlebars
 helpers({
     'handlebars': hbs.handlebars
-})
+});
 
 async function main() {
 let connection = await mysql.createConnection({
@@ -86,7 +86,27 @@ app.post('/customers/:id/delete', async function (req, res){
     } 
 })
 
+//update customer form
+app.get('/customers/:id/update', async function (req, res){
+    const customerId = req.params.id;
+    const [rows] = await connection.execute(`SELECT * from Customers WHERE customer_id = ?`, [customerId]);
+    const [companies] = await connection.execute(`SELECT * from Companies`);
+    res.render('customers/update', {
+        customer : rows[0],
+        companies
+    })
+})
 
+// posting the updated customer details
+app.post('/customers/:id/update', async function (req, res){
+    const customerId = req.params.id;
+    const {first_name, last_name, rating, company_id} = req.body;
+    await connection.execute(`UPDATE Customers SET first_name = ?, last_name = ?, rating = ?, company_id = ?
+WHERE customer_id = ?`, [first_name, last_name, rating, company_id, customerId]);
+
+res.redirect('/customers');
+
+});
 
 // get all employees
 app.get('/employees', async function (req, res) {

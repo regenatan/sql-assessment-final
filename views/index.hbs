@@ -1,34 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <title>Assessment Guide</title>
-</head>
-<body>
-  <div class="container">
-    <!-- A grey horizontal navbar that becomes vertical on small screens -->
-    <nav class="navbar navbar-expand-sm bg-light">
-      <div class="container-fluid">
-        <!-- Links -->
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="/index">home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/customers">customers</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/employees">employees</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+{{ #extends "base"}}
 
-    <div class="container">
+{{#block "content"}}
+<h1>index.hbs page</h1>
 
-    </div>
-  </div>
-</body>
-</html>
+
+{{/block}}
+
+{{/extends}}
