@@ -19,11 +19,10 @@
     </div>
     <div class="mb-3">
       <label>Company</label>
-      <select name="company_id" class="form-select w-100">
+      <select name="company_id" class="form-control">
         {{#each companies}}
-        <option value="{{this.company_id}}"">{{this.name}}</option>
+        <option value="{{this.company_id}}">{{this.name}}</option>
         {{/each}}
-
       </select>
     </div>
     <input type="submit" class="btn btn-primary mt-3" />

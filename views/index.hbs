@@ -1,8 +1,19 @@
-{{ #extends "base"}}
+{{#extends "base"}}
 
 {{#block "content"}}
-<h1>index.hbs page</h1>
+  <h1 class="mt-4">Welcome to Customers are Always Right</h1>
+  <p class="mt-4">Manage Customers:</p>
+  
+  <div class="d-grid gap-2 d-md-block">
+    <a href="/customers" class="btn btn-primary me-2">View All Customers</a>
+    <a href="/customers/create" class="btn btn-success">Create New Customer</a>
 
+      <p class="mt-4">Manage Employees:</p>
+    <div>
+        <a href="/employees" class="btn btn-primary me-2">View All Employees</a>
+        <a href="/employees/create" class="btn btn-success">Create New Employees</a>
+        </div>
+  </div>
 
 {{/block}}
 

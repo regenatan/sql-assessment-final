@@ -30,11 +30,50 @@ let connection = await mysql.createConnection({
 
 //get all customers
 app.get('/customers', async function (req, res) {
-let [customers] = await connection.execute('SELECT * FROM Customers INNER JOIN Companies ON Customers.company_id = Companies.company_id');
-res.render('customers/index',{
-    customers: customers
-});
+    // get the search terms from req.query
+    const { first_name, last_name, rating, company_id } = req.query;
+
+    // First, get all companies for the dropdown
+    const [companies] = await connection.execute(`SELECT * FROM Companies`);
+
+    let basicQuery = `SELECT * FROM Customers JOIN Companies
+                ON Customers.company_id = Companies.company_id WHERE 1`
+
+    const bindings = [];
+
+    if (first_name) {
+        basicQuery = basicQuery + " AND first_name = ?";
+        bindings.push(first_name);
+    }
+
+    if (last_name) {
+        basicQuery = basicQuery + " AND last_name = ?";
+        bindings.push(last_name);
+    }
+
+    if (rating) {
+        basicQuery = basicQuery + " AND rating = ?";
+        bindings.push(rating);
+    }
+
+    if (company_id) {
+        basicQuery = basicQuery + " AND Customers.company_id = ?";
+        bindings.push(company_id);
+    }
+
+    console.log(basicQuery);
+
+    let [customers] = await connection.execute(basicQuery, bindings);
+    res.render('customers/index', {
+        customers: customers,
+        companies: companies,  // Make sure to pass companies to the template
+        first_name, 
+        last_name, 
+        rating, 
+        company_id
+    });
 })
+
 
 // new customer form
 app.get('/customers/create', async function (req,res){
@@ -99,13 +138,16 @@ app.get('/customers/:id/update', async function (req, res){
 
 // posting the updated customer details
 app.post('/customers/:id/update', async function (req, res){
+    try {
     const customerId = req.params.id;
     const {first_name, last_name, rating, company_id} = req.body;
     await connection.execute(`UPDATE Customers SET first_name = ?, last_name = ?, rating = ?, company_id = ?
 WHERE customer_id = ?`, [first_name, last_name, rating, company_id, customerId]);
-
-res.redirect('/customers');
-
+    } catch (e) {
+        console.log(e);
+    } finally {
+        res.redirect('/customers');
+    }
 });
 
 // get all employees
@@ -142,6 +184,7 @@ app.post('/employees/create', async function (req, res){
 })
 
 
+
 //hello world
 app.get('/', (req,res) => {
     res.render('index');
@@ -154,8 +197,6 @@ app.get('/about-us', (req,res) => {
 app.get('contact-us', (req,res) => {
     res.render('contact-us');
 });
-
-
 
 
 
